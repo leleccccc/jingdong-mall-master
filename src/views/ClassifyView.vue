@@ -17,6 +17,19 @@
         </li>
       </ul>
     </cube-scroll>
+    <div class="ball-wrap">
+      <transition
+        v-on:before-enter="beforeEnter"
+        v-on:enter="enter"
+        v-on:after-enter="afterEnter"
+      >
+        <div class="ball" v-if="ball.show">
+          <div class="inner">
+            <i class="cubeic-add"></i>
+          </div>
+        </div>
+      </transition>
+    </div>
   </div>
 </template>
 
@@ -26,6 +39,10 @@ export default {
   data() {
     return {
       // current: '', 
+      ball: {
+        show: false,
+        el: ''
+      },
       imgList: [], // 右侧分类图片数组
       tagList: [  //  左侧分类标签数组
         {
@@ -114,8 +131,43 @@ export default {
       this.imgList = result.data
     }, 
     // 添加分类页商品至购物车
-    addCart(event, item) {
+    addCart(e, item) {
       this.$store.commit('toCart', item)
+      // 让小球显示
+      this.ball.show = true
+      // 获取点击元素
+      this.ball.el = e.target
+    },
+    // 让小球移动到点击的位置
+    beforeEnter: function (el) {
+      const dom = this.ball.el // 获取点击的DOM元素
+      console.log(dom)
+      const rect = dom.getBoundingClientRect() // 获取点击DOM元素的水平垂直位置
+      console.log(rect)
+      const x = rect.left - window.innerWidth * 0.7
+      const y = -(window.innerHeight - rect.top)
+      console.log(x, y)
+      el.style.display = 'block'
+      el.style.transform = `translate3d(0, ${y}px, 0)`
+      const inner = el.querySelector('.inner')
+      inner.style.transform = `translate3d(${x}px, 0, 0)`
+    },
+    // 当与 CSS 结合使用时
+    // 回调函数 done 是可选的
+    enter: function (el, done) {
+      // 触发重绘
+      document.body.offsetHeight
+      // 小球移动回到购物车
+      el.style.transform = `translate3d(0, 0, 0)`
+      const inner = el.querySelector('.inner')
+      inner.style.transform = `translate3d(0, 0, 0)`
+      // 过渡完后执行的事件
+      el.addEventListener("transitionend", done)
+    },
+    afterEnter: function (el) {
+      // 隐藏小球
+      this.ball.show = false
+      el.style.display = 'none'
     }
   },
   created() {
@@ -163,4 +215,19 @@ export default {
           height 80px
         i
           font-size: 25px
+
+.ball-wrap
+  .ball
+    position: fixed
+    left: 70%
+    bottom: 10px
+    z-index: 3
+    color: red
+    transition: all 1s cubic-bezier(0.49, -0.29, 0.75, 0.41)
+    .inner
+      width: 28px
+      height: 27px
+      transition: all 1s linear
+      i
+        font-size: 25px
 </style>

@@ -10,7 +10,6 @@
     @change="changeHandler"
     ></cube-tab-bar>
     <span class="count-sum">{{ countSum }}</span>
-    <div style="width: 100%; height: 900px;"></div>
   </div>
 </template>
 

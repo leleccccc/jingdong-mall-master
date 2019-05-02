@@ -3,11 +3,11 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-export default new Vuex.Store({
+let store = new Vuex.Store({
   state: {
     token: '', 
     countSum: '',
-    cartList: [] // 存储购物车的商品数据
+    cartList: JSON.parse(localStorage.getItem('cartList')) || [] // 存储购物车的商品数据
   },
   mutations: {
     //设置vuex的token，把传进来的token存入vuex
@@ -21,6 +21,31 @@ export default new Vuex.Store({
         goods.cartCount+=1
       } else {
         state.cartList.push({title: item.label, cartCount: 1})
+      }
+    },
+    // 购物车页某个商品加一
+    cartAdd(state, index) {
+      state.cartList[index].cartCount++
+    },
+    // 购物车页某个商品减一
+    cartReduce(state, index) {
+      if (state.cartList[index].cartCount > 1) {
+        state.cartList[index].cartCount--
+      } else {
+        if(window.confirm('确认从购物车删除该商品吗？')) {
+          state.cartList.splice(index, 1)
+        }
+      }
+    },
+    // 清空购物车
+    cartClear(state) {
+      if(state.cartList.length == 0) {
+        alert('购物车已经是空的')
+        console.log('空空')
+      } else {
+        if (window.confirm('确认清空购物车吗？')) {
+          state.cartList = []
+        }
       }
     }
   },
@@ -37,3 +62,9 @@ export default new Vuex.Store({
     }
   }
 });
+// 每次调用mutation的时候都会先进入这个方法
+store.subscribe((mutation, state) => {
+  localStorage.setItem('cartList', JSON.stringify(state.cartList))
+})
+
+export default store

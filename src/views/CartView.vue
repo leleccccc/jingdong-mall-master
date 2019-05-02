@@ -10,7 +10,7 @@
     </div>
     <div class="goods-button">
       <cube-button>下单</cube-button>
-      <cube-button>清空购物车</cube-button>
+      <cube-button @click="clearCart">清空购物车</cube-button>
     </div>
   </div>
 </template>
@@ -32,10 +32,13 @@ export default {
   },
   methods: {
     decreaseCart(index) {
-
+      this.$store.commit('cartReduce', index)
     },
     increaseCart(index) {
-
+      this.$store.commit('cartAdd', index)
+    },
+    clearCart() {
+      this.$store.commit('cartClear')
     }
   }
 }
@@ -53,8 +56,4 @@ export default {
 
 .cart >>> i
   font-size: 22px
-
-// .goods-button
-//   position: absolute
-//   // bottom: 60px
 </style>
