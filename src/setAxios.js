@@ -4,7 +4,7 @@ import router from './router'
 
 // http全局拦截
 // token要放在请求的头部传给后端
-export default function setAxios() {
+function setAxios() {
   axios.interceptors.request.use(
     config => {
       if(store.state.token) {
@@ -12,6 +12,9 @@ export default function setAxios() {
         console.log(123)
       }
       return config
+    },
+    error => {
+      return Promise.reject(error)
     }
   )
 
@@ -30,6 +33,11 @@ export default function setAxios() {
         return data  // 直接返回数据主体
       }
       return response
+    },
+    error => {
+      return Promise.reject(error)
     }
   )
 }
+
+export default setAxios

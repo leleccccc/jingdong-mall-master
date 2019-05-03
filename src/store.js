@@ -7,7 +7,7 @@ let store = new Vuex.Store({
   state: {
     token: '', 
     countSum: '',
-    cartList: JSON.parse(localStorage.getItem('cartList')) || [] // 存储购物车的商品数据
+    cartList: JSON.parse(localStorage.getItem('cartList')) || [], // 存储购物车的商品数据
   },
   mutations: {
     //设置vuex的token，把传进来的token存入vuex
