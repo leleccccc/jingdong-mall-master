@@ -95,6 +95,10 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+.content
+  width: 100vw
+  height: 100vh
+
 .cube-tab-bar
   width: 100%
   position: fixed

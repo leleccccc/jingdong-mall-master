@@ -1,5 +1,6 @@
 module.exports = {
   // lintOnSave: false,
+  publicPath: './',
   configureWebpack: {
     devServer: {
       port: 8888, // 端口
